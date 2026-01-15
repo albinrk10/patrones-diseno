@@ -11,5 +11,5 @@ Si usas Node, deberás configurar TypeScript, por lo que te recomiendo Deno o Bu
 [Fuentes recomendadas](https://gist.github.com/Klerith/f7f558766cb9ad8f36e471cceb5dd910)
 
 
-deno 03-abstract-factory.ts
-deno --watch 03-abstract-factory.ts
+deno .\04.2-prototype.ts
+deno --watch  .\04.2-prototype.ts
