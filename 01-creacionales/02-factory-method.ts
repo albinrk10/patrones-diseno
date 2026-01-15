@@ -32,8 +32,14 @@ class BeefHamburger implements Hamburger {
     }
 }
 
+class HabaHamburger implements Hamburger {
+    prepare(): void {
+        console.log('Preparando una hamburguesa de %chaba', COLORS.orange);
+    }
+}
+
 abstract class Restaurant {
-    abstract createHamburger(): Hamburger;
+   protected abstract createHamburger(): Hamburger;
 
     orderHamburger(): void {
         const hamburger = this.createHamburger();
@@ -57,8 +63,38 @@ class BeefRestaurant extends Restaurant {
 
 }
 
-function main() {
+class HabaRestaurant extends Restaurant {
 
+    override createHamburger(): Hamburger {
+        return new HabaHamburger();
+    }
+
+}
+
+function main() {
+    let restaurant: Restaurant;
+
+    const burgeType = prompt('Que tipo de hamburguesa quieres ? (pollo / beef/ haba) ')
+   
+    switch( burgeType ){
+        case 'pollo':
+         restaurant = new ChickenRestaurant();
+         break;
+         
+      case 'beef':
+        restaurant = new BeefRestaurant();
+        break;
+
+     case 'haba':
+        restaurant = new HabaRestaurant();
+        break;   
+       
+        default:
+            throw new Error('Opcion no valida');
+        
+    }
+    restaurant.orderHamburger();
+    
 }
 
 main();
