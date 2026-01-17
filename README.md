@@ -13,3 +13,5 @@ Si usas Node, deberás configurar TypeScript, por lo que te recomiendo Deno o Bu
 
 deno .\06.2.1-singleton.ts  
 deno --watch  .\06.2.1-singleton.ts
+
+``
