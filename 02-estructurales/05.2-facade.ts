@@ -59,17 +59,24 @@ class Memory {
 
 class ComputerFacade {
   // TODO: Agregar los atributos necesarios CPU, Memory y HardDrive
+  private cPU: CPU = new CPU();
+  private hardDrive: HardDrive= new HardDrive();
+  private memory:Memory=new Memory();
 
   // TODO: Agregar el constructor para instanciar los atributos CPU, Memory y HardDrive
-  constructor() {}
+  constructor()
+  {}
 
   startComputer(): void {
     console.log('\n%cIniciando la computadora...', COLORS.cyan);
 
     // TODO: ejecutar las operaciones necesarias para encender la computadora
     // 1. Cargar el sistema operativo en la memoria - memory.load(0, hardDrive.read(0, 1024))
-    // 2. Saltar a la posición de memoria 0 - cpu.jump(0)
+    this.memory.load(0, this.hardDrive.read(0, 1024)),
+      // 2. Saltar a la posición de memoria 0 - cpu.jump(0)
+      this.cPU.jump(0);
     // 3. Ejecutar las instrucciones del CPU - cpu.execute()
+    this.cPU.execute();
 
     console.log('Computadora lista para usar.\n');
   }
@@ -80,9 +87,11 @@ class ComputerFacade {
 
     // TODO: ejecutar las operaciones necesarias para apagar la computadora
     // 1. Detener las operaciones del CPU - cpu.stopOperations()
+    this.cPU.stopOperations();
     // 2. Liberar la memoria - memory.free()
+    this.memory.free();
     // 3. Cerrar el disco duro - hardDrive.close()
-
+    this.hardDrive.close();
     console.log('Computadora apagada.\n');
   }
 }
@@ -90,7 +99,15 @@ class ComputerFacade {
 // 3. Código Cliente para Usar la Facade
 // TODO: Aquí no hay nada que hacer, debe de encender la computadora y apagarla sin problemas
 function main() {
-  const computer = new ComputerFacade();
+  // const cPU = new CPU();
+  // const hardDrive=new HardDrive();
+  // const memory= new Memory();
+const computer = new ComputerFacade();
+  // const computer = new ComputerFacade({
+  //   cPU,
+  //   hardDrive,
+  //   memory
+  // });
 
   // Encender la computadora usando la fachada
   computer.startComputer();
