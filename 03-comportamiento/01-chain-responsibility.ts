@@ -1,3 +1,6 @@
+import { COLORS } from "../helpers/colors.ts";
+
+
 /**
  * ! Patron Chain of Responsibility
  * Es un patrón de diseño de comportamiento que te permite pasar solicitudes
@@ -9,3 +12,84 @@
  *
  * https://refactoring.guru/es/design-patterns/chain-of-responsibility
  */
+interface Handler {
+    setNext(handler:Handler):Handler;
+    handle(request: string):void;
+}
+
+abstract class BaseHandler implements Handler {
+
+     private nextHandler?: Handler;
+
+    setNext(handler: Handler): Handler {
+        this.nextHandler = handler;
+        return handler;
+    }
+
+    handle(request: string): void {    
+       
+      if(this.nextHandler){
+        this.nextHandler.handle(request);
+      }
+    }
+}
+
+/////Soporte basico
+class BasicSupport extends BaseHandler {
+    override handle(request: string): void {
+      if(request == 'basico'){
+        console.log('Soporte basico: %cResolviendo problema basico', COLORS.green);
+        return;
+      }
+      console.log('Soporte basico: %cpasando el problema a soporte avanzado');
+      super.handle(request);
+    }
+
+    
+}
+
+class AdvancedSupport extends BaseHandler {
+    override handle(request: string): void {
+      if(request == 'avanzado'){
+        console.log('Soporte avanzado: %cResolviendo problema avanzado', COLORS.yellow);
+        return;
+      }
+      console.log('Soporte avanzado: %cpasando el porblema a soporte experto',COLORS.purple);
+      super.handle(request);
+    }
+
+    
+}
+
+
+class ExpertSupport extends BaseHandler {
+    override handle(request: string): void {
+      if(request == 'experto'){
+        console.log('Soporte experto: %cResolviendo problema experto', COLORS.yellow);
+        return;
+      }
+      console.log('Soporte experto: %cNo hay nada que hacer... bye bye',COLORS.red);
+   
+    }
+    
+}
+
+
+function main(){
+
+const basicSupport = new BasicSupport();
+const advancedSupport = new AdvancedSupport();
+const expertSupport = new ExpertSupport();
+
+
+basicSupport.setNext(advancedSupport).setNext(expertSupport)
+
+
+basicSupport.handle('basico');
+basicSupport.handle('avanzado');
+basicSupport.handle('experto');
+basicSupport.handle('nuclear');
+
+}
+
+main();
