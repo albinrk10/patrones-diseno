@@ -12,3 +12,134 @@
  *
  *
  */
+
+import { COLORS } from "../helpers/colors.ts";
+
+ interface Command{
+    execute() :void;
+ }
+
+
+ class Light {
+    turnon(): void {
+        console.log('%cLa luz esta encendida',COLORS.yellow);
+    }
+
+    turnoOff():void {
+        console.log('%cLa luz esta apagada', COLORS.yellow);
+    }
+ }
+
+  class Fan {
+    on(): void {
+        console.log('%cEl ventilador esta encendido',COLORS.yellow);
+    }
+
+    Off():void {
+        console.log('%cEl ventilador esa apagado', COLORS.yellow);
+    }
+ }
+
+ //Comandos
+
+ class LightOnCommand implements Command{
+
+   constructor(private light:Light){}
+
+   execute(): void {
+    this.light.turnon();
+   }
+
+ }
+
+ class LightOffCommand implements Command{
+
+   constructor(private light:Light){}
+
+   execute(): void {
+    this.light.turnoOff();
+   }
+
+ }
+
+ class FanOnCommand implements Command{
+
+   constructor(private fan:Fan){}
+
+   execute(): void {
+    this.fan.on();
+   }
+
+ }
+
+  class FanOffCommand implements Command{
+
+   constructor(private fan:Fan){}
+
+   execute(): void {
+    this.fan.Off();
+   }
+
+ }
+
+ class RemoteControl{
+    private commands: Record<string, Command> = {};
+
+    setComand(button: string, command: Command){
+        this.commands[button] = command;
+    }
+
+    pressButton(button:string): void{
+      if(this.commands[button]){
+        this.commands[button].execute();
+        return;
+      }
+      console.log('%cNo se ha asignado un comando a ese boton', COLORS.red)  
+    }
+ }
+
+ function main(){
+
+  const remoteControl = new RemoteControl();
+  const light =new Light();
+  const fan = new Fan();
+
+  //crear los comnados para los dispositivos 
+  const lightOnCommand = new LightOnCommand(light);
+  const lightOffCommand = new LightOffCommand(light);
+  
+  const fanOnCommand = new FanOnCommand(fan)
+  const fanOffCommand = new FanOffCommand(fan)
+
+  //Asignar las acciones al el control remoto
+  remoteControl.setComand('1',lightOnCommand)
+  remoteControl.setComand('2',lightOffCommand)
+  remoteControl.setComand('3', fanOnCommand)
+  remoteControl.setComand('4', fanOffCommand)
+
+ let continueProgram = true;
+
+ do{
+  console.clear();
+const pressedButton = prompt(`
+    Presiona un boton del control:
+    1.Encender la luz
+    2. Apagar la luz 
+    3. Encender ventilador
+    4. Apagar ventilador
+    
+    Boton:
+    ` 
+)?? ''
+remoteControl.pressButton(pressedButton);
+const continueProgramResponse = prompt(
+    `\n¿Desea continuar?(y/n)`
+)?.toLowerCase()
+continueProgram =continueProgramResponse == 'n' ? false : true;
+ }while ( continueProgram)
+
+
+
+ }
+
+ main();
