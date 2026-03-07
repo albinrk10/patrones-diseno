@@ -41,6 +41,7 @@
         para calcular los impuestos.
  */
 
+
 import { COLORS } from '../helpers/colors.ts';
 
 // Interfaz Strategy
@@ -50,17 +51,23 @@ interface TaxStrategy {
 
 // Estrategia 1: Impuestos en USA
 class USATaxStrategy implements TaxStrategy {
-  // TODO: Implementar el método calculateTax = amount * 0.1
+  calculateTax(amount: number): number {
+    return amount * 0.1;
+  }
 }
 
 // Estrategia 2: Impuestos en Canada
 class CanadaTaxStrategy implements TaxStrategy {
-  // TODO: Implementar el método calculateTax = amount * 0.13
+  calculateTax(amount: number): number {
+    return amount * 0.13;
+  }
 }
 
 // Estrategia 3: Impuestos en Germany
 class GermanyTaxStrategy implements TaxStrategy {
-  // TODO: Implementar el método calculateTax = amount * 0.19
+  calculateTax(amount: number): number {
+    return amount * 0.19;
+  }
 }
 
 // Clase Contexto - TaxCalculator
@@ -68,6 +75,9 @@ class TaxCalculator {
   private strategy: TaxStrategy;
 
   // TODO: Implementar el constructor recibiendo la estrategia a usar
+  constructor(strategy: TaxStrategy) {
+    this.strategy = strategy;
+  }
 
   // Cambiar la estrategia de cálculo de impuestos
   setStrategy(strategy: TaxStrategy): void {
