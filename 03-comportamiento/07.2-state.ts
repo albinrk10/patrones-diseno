@@ -7,7 +7,10 @@
  * * y debe cambiar su comportamiento en tiempo de ejecución dependiendo de ese estado.
  */
 
-import { COLORS, sleep } from '../helpers/index.ts';
+import { sleep } from "../helpers/sleep.ts";
+import { COLORS } from '../helpers/colors.ts';
+
+
 
 /**
  * !Objetivo:
@@ -61,9 +64,14 @@ class Closed implements State {
   private door: AutomaticDoor;
   public name: string;
 
+  constructor(door: AutomaticDoor) {
+    this.door = door;
+    this.name = 'Cerrada';
+  }
+
   open(): void {
     console.log('Abriendo la puerta...');
-    // TODO: Implementar lógica para colocar el estado en abriendo la puerta (Opening)
+    this.door.setState(new Opening(this.door));
   }
 
   close(): void {
@@ -78,6 +86,9 @@ class Opening implements State {
 
   constructor(door: AutomaticDoor) {
     //TODO: asignar door y name = Abriendo
+    this.door = door;
+    this.name = 'Abriendo...';
+
     this.afterOpen();
   }
 
@@ -85,7 +96,7 @@ class Opening implements State {
     await sleep(3000);
 
     console.log('La puerta se ha abierto.');
-    // TODO: Implementar lógica para abrir la puerta (Open)
+    this.door.setState(new Open(this.door));
   }
 
   open(): void {
@@ -104,6 +115,7 @@ class Open implements State {
 
   constructor(door: AutomaticDoor) {
     this.name = 'Abierta';
+    this.door = door;
   }
 
   open(): void {
@@ -112,27 +124,37 @@ class Open implements State {
 
   close(): void {
     console.log('Cerrando la puerta...');
-    // TODO: Implementar lógica para cerrar la puerta (Closing)
+    this.door.setState(new Closing(this.door));
   }
 }
 
 // Estado 4 - Cerrándose
 class Closing implements State {
+  private door: AutomaticDoor;
   public name: string;
 
   constructor(door: AutomaticDoor) {
     this.door = door;
     this.name = 'Cerrándose';
+
+    this.afterClosed();
+  }
+
+  private async afterClosed() {
+    await sleep(3000);
+
+    console.log('La puerta se ha cerrado.');
+    this.door.setState(new Closed(this.door));
   }
 
   open(): void {
     console.log('Detectando movimiento. Abriendo la puerta nuevamente...');
-    //TODO: Implementar lógica para abrir la puerta (Opening)
+    this.door.setState(new Opening(this.door));
   }
 
   close(): void {
     console.log('La puerta se ha cerrado.');
-    // TODO: Implementar lógica para cerrar la puerta (Closed)
+    this.door.setState(new Closed(this.door));
   }
 }
 
